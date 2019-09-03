@@ -39,7 +39,8 @@ let server = http.createServer((req,res)=>{
                 });
                 child.stdout.on('end',(buffer)=>{
                     let log = Buffer.concat(buffers);
-                    console.log(log.length);
+                    console.log('build completed: ',payload.repository.name);
+                    console.log('size: ',log.length,'bytes');
                 })
             }
         })
