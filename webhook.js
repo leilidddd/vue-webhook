@@ -1,5 +1,6 @@
 let http = require('http');
 let crypto = require('crypto');
+let spawn = require('child_process')
 let SECRET = '19940819li';
 
 let sign = (body)=>{
@@ -23,15 +24,26 @@ let server = http.createServer((req,res)=>{
             let signature = req.headers['x-hub-signature'];
             if(signature !== sign(body)){
                 return res.end('Not Allowed');
-            }else{
-                
+            }
+            res.setHeader('Content-Type','application/json');
+            res.end(JSON.stringify({ok:true}));
+            if(event == 'push'){
+                let payload = JSON.parse(body);
+                console.log('repository: '`${payload.repository.name}`);
+                let child = spawn('sh',[`./${payload.repository.name}`]);
+                let buffers = [];
+                child.stdout.on('data',(buffer)=>{
+                    buffers.push(buffer);
+                });
+                child.stdout.on('end',(buffer)=>{
+                    let log = Buffer.concat(buffers);
+                    console.log(log);
+                })
+            
             }
 
 
-
         })
-        res.setHeader('Content-Type','application/json');
-        res.end(JSON.stringify({ok:true}));
     }else{
         res.end('Not Found');
     }
