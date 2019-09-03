@@ -1,5 +1,4 @@
 let nodemailer=require('nodemailer');
-let xoauth2 = require('xoauth2');
 
 let smtpTransport=nodemailer.createTransport({
     service: 'qq', // 使用了内置传输发送邮件 查看支持列表：https://nodemailer.com/smtp/well-known/
