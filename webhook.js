@@ -1,6 +1,6 @@
 let http = require('http');
 let crypto = require('crypto');
-let spawn = require('child_process')
+let {spawn} = require('child_process');
 let SECRET = '19940819li';
 
 let sign = (body)=>{
