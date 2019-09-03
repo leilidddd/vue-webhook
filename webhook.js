@@ -25,11 +25,13 @@ let server = http.createServer((req,res)=>{
             }
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify({ok:true}));
-            console.log('event ',event);
             if(event == 'push'){
                 let payload = JSON.parse(body);
-                console.log('payload ',payload);
-                console.log('repository: ',`${payload.repository.name}`);
+
+                console.log('repository: ',payload.repository.name);
+                console.log('committer: ',JSON.stringify(payload.commits.committer));
+                console.log('pusher: ',payload.pusher.name);
+
                 let child = spawn('sh',[`./${payload.repository.name}.sh`]);
                 let buffers = [];
                 child.stdout.on('data',(buffer)=>{
@@ -37,7 +39,6 @@ let server = http.createServer((req,res)=>{
                 });
                 child.stdout.on('end',(buffer)=>{
                     let log = Buffer.concat(buffers);
-                    console.log(log);
                 })
             
             }
