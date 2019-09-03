@@ -2,6 +2,7 @@ let http = require('http');
 let crypto = require('crypto');
 let {spawn} = require('child_process');
 let SECRET = '19940819li';
+let sendMail = require('./sendMail');
 
 let sign = (body)=>{
     return `sha1=`+crypto.createHmac('sha1',SECRET).update(body).digest('hex');
@@ -39,6 +40,7 @@ let server = http.createServer((req,res)=>{
                 });
                 child.stdout.on('end',(buffer)=>{
                     let log = Buffer.concat(buffers);
+                    sendMail('<p>部署成功</p>');
                     console.log('build completed: ',payload.repository.name);
                     console.log('size: ',log.length,'bytes');
                 })
