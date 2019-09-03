@@ -23,13 +23,14 @@ let server = http.createServer((req,res)=>{
             if(signature !== sign(body)){
                 return res.end('Not Allowed');
             }
-            console.log('signature checked');
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify({ok:true}));
+            console.log('event ',event);
             if(event == 'push'){
                 let payload = JSON.parse(body);
+                console.log('payload ',payload);
                 console.log('repository: '`${payload.repository.name}`);
-                let child = spawn('sh',[`./${payload.repository.name}`]);
+                let child = spawn('sh',[`./${payload.repository.name}.sh`]);
                 let buffers = [];
                 child.stdout.on('data',(buffer)=>{
                     buffers.push(buffer);
