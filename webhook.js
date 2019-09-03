@@ -19,12 +19,11 @@ let server = http.createServer((req,res)=>{
             //events:push
             let event = req.headers['x-github-events'];
             //签名
-            let delivery = req.headers['x-github-delivery'];
-            //签名
             let signature = req.headers['x-hub-signature'];
             if(signature !== sign(body)){
                 return res.end('Not Allowed');
             }
+            console.log('signature checked');
             res.setHeader('Content-Type','application/json');
             res.end(JSON.stringify({ok:true}));
             if(event == 'push'){
